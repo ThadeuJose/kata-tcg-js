@@ -1,0 +1,24 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Add your custom styles or modifications here */
+.h-80vh {
+    height: 70vh;
+}
+
+.h-70vh {
+    height: 70vh;
+}
+
+.h-20vh {
+    height: 30vh;
+}
+
+.h-30vh {
+    height: 30vh;
+}
+
+.w-80vw {
+    width: 80vw;
+}
