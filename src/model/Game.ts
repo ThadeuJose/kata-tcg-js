@@ -78,10 +78,29 @@ export class Game {
 
   pass(): void {
     this.passAction();
+    this.AITurn();
+  }
+
+  public AITurn(): void {
     if (this.isAggressiveAI) {
-      this.playDamageCard(this._player2, 0, this._player1);
+      let index: number = this.AIFindIndexOfMostPowerfulCard();
+      while (index !== -1 && this._isPlaying) {
+        this.playDamageCard(this._player2, index, this._player1);
+        index = this.AIFindIndexOfMostPowerfulCard();
+      }
     }
-    this.passAction();
+    if (this._isPlaying) {
+      this.passAction();
+    }
+  }
+
+  private AIFindIndexOfMostPowerfulCard(): number {
+    return findIndexOfMaxLesserThen(
+      this._player2.hand.map((elem) => {
+        return elem.manaCost;
+      }),
+      this._player2.mana
+    );
   }
 
   private passAction(): void {
@@ -157,4 +176,18 @@ export class Game {
       log: [...this._log]
     };
   }
+}
+
+export function findIndexOfMaxLesserThen(array: number[], x: number): number {
+  let index: number = -1;
+  let maxLesser: number = -1;
+
+  for (let i = 0; i < array.length; i++) {
+    if (array[i] <= x && array[i] > maxLesser) {
+      maxLesser = array[i];
+      index = i;
+    }
+  }
+
+  return index;
 }

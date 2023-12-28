@@ -52,6 +52,7 @@ export function createDefaultProps(): StoreProps {
 
 export function createDefaultPropsWithShuffleDeck(): StoreProps {
   const props: StoreProps = createDefaultProps();
+  props.isAggressiveAI = true;
   props.player1Config.deck = shuffleDeck(props.player1Config.deck);
   props.player2Config.deck = shuffleDeck(props.player2Config.deck);
   return props;

@@ -56,7 +56,8 @@ describe('<Game />', () => {
     cy.get("[data-cy='PassButton']").click();
     cy.get("[data-cy='Log']").eq(0).should('have.text', 'Player 1 pass');
     cy.get("[data-cy='Log']").eq(1).should('have.text', 'Player 2 deal 1 damage to Player 1');
-    cy.get("[data-cy='Log']").eq(2).should('have.text', 'Player 2 pass');
+    cy.get("[data-cy='Log']").eq(2).should('have.text', 'Player 2 deal 0 damage to Player 1');
+    cy.get("[data-cy='Log']").eq(3).should('have.text', 'Player 2 pass');
 
     cy.get("[data-cy='Player1Health']").should('have.text', '29');
   });
