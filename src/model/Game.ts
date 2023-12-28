@@ -1,5 +1,5 @@
 import type Card from './Card';
-import Player, { type PlayerConfig } from './Player';
+import type Player from './Player';
 
 export interface CardState {
   manaCost: number;
@@ -20,12 +20,10 @@ export interface GameState {
 }
 
 export class Game {
-  private readonly PLAYER_1_NAME: string = 'Player 1';
-  private readonly PLAYER_2_NAME: string = 'Player 2';
   private readonly _player1: Player;
   private readonly _player2: Player;
 
-  private readonly _log: string[];
+  private _log: string[];
   private readonly isAggressiveAI: boolean;
 
   private _activePlayer: Player;
@@ -35,11 +33,11 @@ export class Game {
   constructor(
     isAggressiveAI: boolean,
     shouldStartInitProcess: boolean,
-    player1Config: PlayerConfig,
-    player2Config: PlayerConfig
+    player1: Player,
+    player2: Player
   ) {
-    this._player1 = new Player(this.PLAYER_1_NAME, player1Config);
-    this._player2 = new Player(this.PLAYER_2_NAME, player2Config);
+    this._player1 = player1;
+    this._player2 = player2;
     this._activePlayer = this._player1;
     this._log = [];
     this.isAggressiveAI = isAggressiveAI;
@@ -52,11 +50,22 @@ export class Game {
   init(): void {
     this.drawAction(this._activePlayer, 3);
     const nonActivePlayer =
-      this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
+      this._activePlayer.name === this._player1.name ? this._player2 : this._player1;
     this.drawAction(nonActivePlayer, 4);
 
     this._activePlayer.increaseManaSlot();
     this._activePlayer.refillMana();
+  }
+
+  reset(): void {
+    this._activePlayer = this._player1;
+    this._log = [];
+    this._isPlaying = true;
+
+    this._player1.reset();
+    this._player2.reset();
+
+    this.init();
   }
 
   canCast(index: number): boolean {
@@ -78,7 +87,7 @@ export class Game {
   private passAction(): void {
     this._log.push(`${this._activePlayer.name} pass`);
     this._activePlayer =
-      this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
+      this._activePlayer.name === this._player1.name ? this._player2 : this._player1;
     this.drawAction(this._activePlayer);
     this._activePlayer.increaseManaSlot();
     this._activePlayer.refillMana();

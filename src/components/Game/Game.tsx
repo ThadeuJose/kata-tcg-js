@@ -23,7 +23,10 @@ export default function Game({ game }: GameProps): JSX.Element {
     setState(game.getState());
   }
 
-  function handleNewGameButtonClick(): void {}
+  function handleNewGameButtonClick(): void {
+    game.reset();
+    setState(game.getState());
+  }
 
   function handleCardButton(index: number): void {
     setCardSelectIndex(index);

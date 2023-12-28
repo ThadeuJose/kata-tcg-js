@@ -1,6 +1,8 @@
+import { shuffleDeck } from '../Store';
 import Card from './Card';
 
 export interface PlayerConfig {
+  name: string;
   hand: number[];
   mana: number;
   health: number;
@@ -12,15 +14,19 @@ export default class Player {
   private _health: number;
 
   private readonly MAX_MANA: number = 10;
+  private readonly STARTER_MANA_SLOT: number = 0;
   private _manaSlot: number;
+  private readonly STARTER_MANA: number = 0;
   private _mana: number;
 
-  private readonly _hand: Card[];
-  private readonly _deck: Card[];
+  private readonly STARTER_HAND: Card[] = [];
+  private _hand: Card[];
+  private readonly STARTER_DECK: Card[];
+  private _deck: Card[];
 
   private readonly _name: string;
 
-  constructor(name: string, { hand, health, mana, deck }: PlayerConfig) {
+  constructor({ name, hand, health, mana, deck }: PlayerConfig) {
     this._name = name;
     this._health = health;
 
@@ -31,6 +37,8 @@ export default class Player {
     this._deck = deck.map((elem) => {
       return new Card(elem);
     });
+
+    this.STARTER_DECK = [...this._deck];
 
     this._mana = mana;
     this._manaSlot = 0;
@@ -96,5 +104,13 @@ export default class Player {
 
   public isDeath(): boolean {
     return this._health <= 0;
+  }
+
+  reset(): void {
+    this._health = this.STARTER_HEALTH;
+    this._mana = this.STARTER_MANA;
+    this._manaSlot = this.STARTER_MANA_SLOT;
+    this._deck = shuffleDeck(this.STARTER_DECK);
+    this._hand = this.STARTER_HAND;
   }
 }

@@ -1,6 +1,6 @@
 import Game from './components/Game/Game';
 import { Game as GameModel } from './model/Game';
-import { type PlayerConfig } from './model/Player';
+import Player, { type PlayerConfig } from './model/Player';
 
 export interface StoreProps {
   isAggressiveAI: boolean;
@@ -18,8 +18,8 @@ export function Store({
   const game: GameModel = new GameModel(
     isAggressiveAI,
     shouldStartInitProcess,
-    player1Config,
-    player2Config
+    new Player(player1Config),
+    new Player(player2Config)
   );
 
   return (
@@ -34,12 +34,14 @@ export function createDefaultProps(): StoreProps {
     isAggressiveAI: false,
     shouldStartInitProcess: true,
     player1Config: {
+      name: 'Player 1',
       hand: [],
       health: 30,
       mana: 0,
       deck: [0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5, 5, 6, 6, 7, 8]
     },
     player2Config: {
+      name: 'Player 2',
       hand: [],
       health: 30,
       mana: 0,
@@ -55,7 +57,7 @@ export function createDefaultPropsWithShuffleDeck(): StoreProps {
   return props;
 }
 
-function shuffleDeck(deck: any): any {
+export function shuffleDeck(deck: any): any {
   const shuffledDeck = [...deck];
   // Shuffle the deck using some algorithm (e.g., Fisher-Yates shuffle)
   for (let i = shuffledDeck.length - 1; i > 0; i--) {
