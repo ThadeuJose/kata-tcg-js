@@ -86,8 +86,12 @@ export default class Player {
   public draw(amount: number = 1): void {
     for (let index = 0; index < amount; index++) {
       const card = this._deck.shift();
-      if (card !== undefined && this._hand.length < 5) {
-        this._hand.push(card);
+      if (card === undefined) {
+        this.dealDamage(1);
+      } else {
+        if (this._hand.length < 5) {
+          this._hand.push(card);
+        }
       }
     }
   }
