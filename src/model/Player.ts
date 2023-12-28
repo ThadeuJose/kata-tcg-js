@@ -19,7 +19,6 @@ export default class Player {
   private readonly STARTER_MANA: number = 0;
   private _mana: number;
 
-  private readonly STARTER_HAND: Card[] = [];
   private _hand: Card[];
   private readonly STARTER_DECK: Card[];
   private _deck: Card[];
@@ -111,6 +110,6 @@ export default class Player {
     this._mana = this.STARTER_MANA;
     this._manaSlot = this.STARTER_MANA_SLOT;
     this._deck = shuffleDeck(this.STARTER_DECK);
-    this._hand = this.STARTER_HAND;
+    this._hand = [];
   }
 }
