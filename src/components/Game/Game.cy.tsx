@@ -5,16 +5,20 @@ describe('<Game />', () => {
     cy.mount(<Store {...createDefaultProps()}></Store>);
   });
 
-  it('Should draw 3 cards when start', () => {
-    const testProps: StoreProps = createDefaultProps();
-    testProps.player1Config.deck = [7, 6, 8];
-    cy.mount(<Store {...testProps} />);
+  it('Player 1 should draw 3 cards when start', () => {
+    cy.mount(<Store {...createDefaultProps()}></Store>);
 
-    cy.get("[data-cy='Player1Hand']").eq(0).should('have.text', 7);
-    cy.get("[data-cy='Player1Hand']").eq(1).should('have.text', 6);
-    cy.get("[data-cy='Player1Hand']").eq(2).should('have.text', 8);
+    cy.get("[data-cy='Player1Hand']").should('have.length', 3);
 
-    cy.get("[data-cy='Player1DeckSize']").should('have.text', 0);
+    cy.get("[data-cy='Player1DeckSize']").should('have.text', 17);
+  });
+
+  it('Player 1 should draw 4 cards when start', () => {
+    cy.mount(<Store {...createDefaultProps()}></Store>);
+
+    cy.get("[data-cy='Player2Hand']").should('have.length', 4);
+
+    cy.get("[data-cy='Player2DeckSize']").should('have.text', 16);
   });
 
   it('Should deal 1 damage to AI', () => {

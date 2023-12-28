@@ -51,9 +51,9 @@ export class Game {
 
   init(): void {
     this.drawAction(this._activePlayer, 3);
-    // const nonActivePlayer =
-    //   this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
-    // nonActivePlayer.draw(4);
+    const nonActivePlayer =
+      this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
+    this.drawAction(nonActivePlayer, 4);
 
     this._activePlayer.increaseManaSlot();
     this._activePlayer.refillMana();
@@ -138,7 +138,9 @@ export class Game {
       },
       player2: {
         health: this._player2.health,
-        hand: [],
+        hand: this._player2.hand.map((elem) => {
+          return { manaCost: elem.manaCost };
+        }),
         mana: this._player2.mana,
         manaSlot: this._player2.manaSlot,
         deckSize: this._player2.deckSize

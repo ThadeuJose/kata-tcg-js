@@ -67,6 +67,20 @@ export default function Game({ game }: GameProps): JSX.Element {
 
   return (
     <div className="m-auto w-fit">
+      <div className="flex">
+        {state.player2.hand.map((elem, index) => {
+          return (
+            <div
+              data-cy="Player2Hand"
+              className="border-gray-300hover:border-emerald-500 border-2 rounded px-2 py-1 font-semibold flex items-center justify-center h-28 w-24"
+              key={index}
+              data-index={index}></div>
+          );
+        })}
+      </div>
+      <div data-cy="Player2DeckSize" className="ml-auto">
+        {state.player2.deckSize}
+      </div>
       <div className="flex items-center">
         <div className="font-semibold text-xl pr-2">Player 2</div>
         <div
