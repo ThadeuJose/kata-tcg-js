@@ -3,6 +3,7 @@ import Card from './Card';
 export interface PlayerConfig {
   hand: number[];
   mana: number;
+  health: number;
   deck: number[];
 }
 
@@ -19,9 +20,9 @@ export default class Player {
 
   private readonly _name: string;
 
-  constructor(name: string, { hand, mana, deck }: PlayerConfig) {
+  constructor(name: string, { hand, health, mana, deck }: PlayerConfig) {
     this._name = name;
-    this._health = this.STARTER_HEALTH;
+    this._health = health;
 
     this._hand = hand.map((elem) => {
       return new Card(elem);
@@ -83,16 +84,17 @@ export default class Player {
     return this.hand[index].manaCost <= this._mana;
   }
 
-  public draw(amount: number = 1): void {
-    for (let index = 0; index < amount; index++) {
-      const card = this._deck.shift();
-      if (card === undefined) {
-        this.dealDamage(1);
-      } else {
-        if (this._hand.length < 5) {
-          this._hand.push(card);
-        }
-      }
+  public drawToHand(): Card | undefined {
+    return this._deck.shift();
+  }
+
+  public addCardInHand(card: Card): void {
+    if (this._hand.length < 5) {
+      this._hand.push(card);
     }
+  }
+
+  public isDeath(): boolean {
+    return this._health <= 0;
   }
 }

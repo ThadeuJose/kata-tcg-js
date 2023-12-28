@@ -30,6 +30,8 @@ export class Game {
 
   private _activePlayer: Player;
 
+  private _isPlaying: boolean;
+
   constructor(
     isAggressiveAI: boolean,
     shouldStartInitProcess: boolean,
@@ -41,13 +43,14 @@ export class Game {
     this._activePlayer = this._player1;
     this._log = [];
     this.isAggressiveAI = isAggressiveAI;
+    this._isPlaying = true;
     if (shouldStartInitProcess) {
       this.init();
     }
   }
 
   init(): void {
-    this._activePlayer.draw(3);
+    this.drawAction(this._activePlayer, 3);
     // const nonActivePlayer =
     //   this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
     // nonActivePlayer.draw(4);
@@ -76,9 +79,35 @@ export class Game {
     this._log.push(`${this._activePlayer.name} pass`);
     this._activePlayer =
       this._activePlayer.name === this.PLAYER_1_NAME ? this._player2 : this._player1;
-    this._activePlayer.draw();
+    this.drawAction(this._activePlayer);
     this._activePlayer.increaseManaSlot();
     this._activePlayer.refillMana();
+  }
+
+  private drawAction(player: Player, amount: number = 1): void {
+    for (let index = 0; index < amount; index++) {
+      const card: Card | undefined = player.drawToHand();
+      if (card === undefined) {
+        player.dealDamage(1);
+        this._log.push(`${player.name} receive 1 damage`);
+        this.checkIfGameEnded();
+      } else {
+        player.addCardInHand(card);
+      }
+    }
+  }
+
+  private checkIfGameEnded(): void {
+    if (this._player1.isDeath()) {
+      const otherPlayer: Player = this._player2;
+      this._log.push(`${otherPlayer.name} wins`);
+      this._isPlaying = false;
+    }
+    if (this._player2.isDeath()) {
+      const otherPlayer: Player = this._player1;
+      this._log.push(`${otherPlayer.name} wins`);
+      this._isPlaying = false;
+    }
   }
 
   private playDamageCard(owner: Player, index: number, target: Player): void {
@@ -86,9 +115,14 @@ export class Game {
     const damageValue = card.damageValue;
     const manaCost = card.manaCost;
 
-    target.dealDamage(damageValue);
     owner.spendMana(manaCost);
+    target.dealDamage(damageValue);
     this._log.push(`${owner.name} deal ${card.damageValue} damage to ${target.name}`);
+    this.checkIfGameEnded();
+  }
+
+  public isPlaying(): boolean {
+    return this._isPlaying;
   }
 
   getState(): GameState {

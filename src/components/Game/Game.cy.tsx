@@ -165,4 +165,41 @@ describe('<Game />', () => {
 
     cy.get("[data-cy='Player1Health']").should('have.text', '28');
   });
+
+  it('Should win if other player has 0 life', () => {
+    const testProps: StoreProps = createDefaultProps();
+    testProps.player1Config.hand = [1];
+    testProps.player1Config.mana = 1;
+    testProps.player1Config.deck = [];
+    testProps.player2Config.health = 1;
+    testProps.shouldStartInitProcess = false;
+    cy.mount(<Store {...testProps} />);
+
+    cy.get("[data-cy='Player1Hand']").eq(0).click();
+    cy.get("[data-cy='PlayButton']").click();
+
+    cy.get("[data-cy='Log']").eq(1).should('have.text', 'Player 1 wins');
+    cy.get("[data-cy='Player2Health']").should('have.text', '0');
+    cy.get("[data-cy='NewGameButton']").should('exist');
+    cy.get("[data-cy='PlayButton']").should('not.exist');
+    cy.get("[data-cy='PassButton']").should('not.exist');
+  });
+
+  it('Should lost if has 0 life after draw', () => {
+    const testProps: StoreProps = createDefaultProps();
+    testProps.player1Config.hand = [1];
+    testProps.player1Config.mana = 1;
+    testProps.player1Config.health = 1;
+    testProps.player1Config.deck = [];
+    testProps.shouldStartInitProcess = false;
+    cy.mount(<Store {...testProps} />);
+
+    cy.get("[data-cy='PassButton']").click();
+
+    cy.get("[data-cy='Log']").eq(3).should('have.text', 'Player 2 wins');
+    cy.get("[data-cy='Player1Health']").should('have.text', '0');
+    cy.get("[data-cy='NewGameButton']").should('exist');
+    cy.get("[data-cy='PlayButton']").should('not.exist');
+    cy.get("[data-cy='PassButton']").should('not.exist');
+  });
 });

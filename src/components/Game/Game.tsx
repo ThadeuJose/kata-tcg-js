@@ -23,6 +23,8 @@ export default function Game({ game }: GameProps): JSX.Element {
     setState(game.getState());
   }
 
+  function handleNewGameButtonClick(): void {}
+
   function handleCardButton(index: number): void {
     setCardSelectIndex(index);
   }
@@ -32,6 +34,35 @@ export default function Game({ game }: GameProps): JSX.Element {
       return 'bg-green-400';
     }
     return 'bg-gray-400';
+  }
+
+  function Panel(): JSX.Element {
+    if (game.isPlaying()) {
+      return (
+        <>
+          <button
+            data-cy="PlayButton"
+            className={`${selectButton()} hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
+            onClick={handlePlayButtonClick}>
+            Play Card
+          </button>
+          <button
+            data-cy="PassButton"
+            className={`bg-green-400 hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
+            onClick={handlePassButtonClick}>
+            Pass
+          </button>
+        </>
+      );
+    }
+    return (
+      <button
+        data-cy="NewGameButton"
+        className={`bg-green-400 hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
+        onClick={handleNewGameButtonClick}>
+        New Game
+      </button>
+    );
   }
 
   return (
@@ -65,18 +96,7 @@ export default function Game({ game }: GameProps): JSX.Element {
       </div>
 
       <div className="flex">
-        <button
-          data-cy="PlayButton"
-          className={`${selectButton()} hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
-          onClick={handlePlayButtonClick}>
-          Play Card
-        </button>
-        <button
-          data-cy="PassButton"
-          className={`bg-green-400 hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
-          onClick={handlePassButtonClick}>
-          Pass
-        </button>
+        {Panel()}
         <div data-cy="Player1DeckSize" className="ml-auto">
           {state.player1.deckSize}
         </div>
