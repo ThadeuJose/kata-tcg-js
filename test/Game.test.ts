@@ -21,11 +21,13 @@ describe('Game', () => {
 
     expect(player1.health).toBe(30);
     expect(player1.hand.length).toBe(3);
+    expect(player1.deckSize).toBe(17);
     expect(player1.mana).toBe(1);
     expect(player1.manaSlot).toBe(1);
 
     expect(player2.health).toBe(30);
     expect(player2.hand.length).toBe(4);
+    expect(player2.deckSize).toBe(16);
     expect(player2.mana).toBe(0);
     expect(player2.manaSlot).toBe(0);
   });
