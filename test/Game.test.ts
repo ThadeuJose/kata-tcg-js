@@ -30,5 +30,7 @@ describe('Game', () => {
     expect(player2.deckSize).toBe(16);
     expect(player2.mana).toBe(0);
     expect(player2.manaSlot).toBe(0);
+
+    expect(game.getState().log).toHaveLength(0);
   });
 });

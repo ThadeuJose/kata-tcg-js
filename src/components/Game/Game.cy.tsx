@@ -206,23 +206,4 @@ describe('<Game />', () => {
     cy.get("[data-cy='PlayButton']").should('not.exist');
     cy.get("[data-cy='PassButton']").should('not.exist');
   });
-
-  it('Should start a new game', () => {
-    const testProps: StoreProps = createDefaultProps();
-    testProps.player1Config.hand = [1];
-    testProps.player1Config.mana = 1;
-    testProps.player1Config.health = 1;
-    testProps.player1Config.deck = [];
-    testProps.shouldStartInitProcess = false;
-    cy.mount(<Store {...testProps} />);
-
-    cy.get("[data-cy='PassButton']").click();
-    cy.get("[data-cy='NewGameButton']").click();
-
-    cy.get("[data-cy='NewGameButton']").should('not.exist');
-    cy.get("[data-cy='PlayButton']").should('exist');
-    cy.get("[data-cy='PassButton']").should('exist');
-
-    cy.get("[data-cy='Log']").should('have.length', 0);
-  });
 });
