@@ -136,4 +136,19 @@ describe('<Game />', () => {
 
     cy.get("[data-cy='Player1Hand']").should('have.length', '4');
   });
+
+  it('Should not draw more then 5 card', () => {
+    const testProps: StoreProps = createDefaultProps();
+    testProps.player1Config.hand = [1, 1, 1, 1];
+    testProps.player1Config.mana = 0;
+    testProps.player1Config.deck = [1, 0, 0];
+    testProps.shouldStartInitProcess = false;
+    cy.mount(<Store {...testProps} />);
+
+    cy.get("[data-cy='PassButton']").click();
+    cy.get("[data-cy='PassButton']").click();
+
+    cy.get("[data-cy='Player1DeckSize']").should('have.text', '1');
+    cy.get("[data-cy='Player1Hand']").should('have.length', '5');
+  });
 });
