@@ -71,6 +71,10 @@ export default class Player {
     this._health -= value;
   }
 
+  public heal(value: number): void {
+    this._health = Math.min(this.health + value, this.STARTER_HEALTH);
+  }
+
   public getCard(index: number): Card {
     return this._hand.splice(index, 1)[0];
   }

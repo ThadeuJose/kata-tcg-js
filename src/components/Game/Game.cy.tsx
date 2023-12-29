@@ -207,4 +207,36 @@ describe('<Game />', () => {
     cy.get("[data-cy='PlayButton']").should('not.exist');
     cy.get("[data-cy='PassButton']").should('not.exist');
   });
+
+  it('Should heal damage', () => {
+    const testProps: StoreProps = createDefaultProps();
+    testProps.player1Config.hand = [2];
+    testProps.player1Config.mana = 2;
+    testProps.player1Config.health = 1;
+    testProps.player1Config.deck = [];
+    testProps.shouldStartInitProcess = false;
+    cy.mount(<Store {...testProps} />);
+
+    cy.get("[data-cy='Player1Hand']").eq(0).click();
+    cy.get("[data-cy='HealButton']").click();
+
+    cy.get("[data-cy='Log']").contains('Player 1 heal 2 damage');
+    cy.get("[data-cy='Player1Health']").should('have.text', '3');
+  });
+
+  it('Should heal damage until max health', () => {
+    const testProps: StoreProps = createDefaultProps();
+    testProps.player1Config.hand = [8];
+    testProps.player1Config.mana = 8;
+    testProps.player1Config.health = 27;
+    testProps.player1Config.deck = [];
+    testProps.shouldStartInitProcess = false;
+    cy.mount(<Store {...testProps} />);
+
+    cy.get("[data-cy='Player1Hand']").eq(0).click();
+    cy.get("[data-cy='HealButton']").click();
+
+    cy.get("[data-cy='Log']").contains('Player 1 heal 8 damage');
+    cy.get("[data-cy='Player1Health']").should('have.text', '30');
+  });
 });

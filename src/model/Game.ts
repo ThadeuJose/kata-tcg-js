@@ -76,6 +76,17 @@ export class Game {
     this.playDamageCard(this._player1, index, this._player2);
   }
 
+  heal(index: number): void {
+    const owner: Player = this._player1;
+    const card: Card = owner.getCard(index);
+    const healingValue = card.healingValue;
+    const manaCost = card.manaCost;
+
+    owner.spendMana(manaCost);
+    owner.heal(healingValue);
+    this._log.push(`${owner.name} heal ${healingValue} damage`);
+  }
+
   pass(): void {
     this.passAction();
     this.AITurn();
@@ -145,7 +156,7 @@ export class Game {
 
     owner.spendMana(manaCost);
     target.dealDamage(damageValue);
-    this._log.push(`${owner.name} deal ${card.damageValue} damage to ${target.name}`);
+    this._log.push(`${owner.name} deal ${damageValue} damage to ${target.name}`);
     this.checkIfGameEnded();
   }
 

@@ -18,6 +18,14 @@ export default function Game({ game }: GameProps): JSX.Element {
     }
   }
 
+  function handleHealButtonClick(): void {
+    if (cardSelectIndex !== -1 && game.canCast(cardSelectIndex)) {
+      game.heal(cardSelectIndex);
+      setState(game.getState());
+      setCardSelectIndex(-1);
+    }
+  }
+
   function handlePassButtonClick(): void {
     game.pass();
     setState(game.getState());
@@ -32,9 +40,9 @@ export default function Game({ game }: GameProps): JSX.Element {
     setCardSelectIndex(index);
   }
 
-  function selectButton(): string {
+  function selectButton(classname: string): string {
     if (cardSelectIndex !== -1 && game.canCast(cardSelectIndex)) {
-      return 'bg-green-400';
+      return classname;
     }
     return 'bg-gray-400';
   }
@@ -45,9 +53,19 @@ export default function Game({ game }: GameProps): JSX.Element {
         <>
           <button
             data-cy="PlayButton"
-            className={`${selectButton()} hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
+            className={`${selectButton(
+              'bg-green-400'
+            )} hover:bg-green-500 rounded px-2 py-1 font-semibold text-center`}
             onClick={handlePlayButtonClick}>
             Play Card
+          </button>
+          <button
+            data-cy="HealButton"
+            className={`${selectButton(
+              'bg-red-400'
+            )} hover:bg-red-500 rounded px-2 py-1 font-semibold text-center`}
+            onClick={handleHealButtonClick}>
+            Heal
           </button>
           <button
             data-cy="PassButton"
